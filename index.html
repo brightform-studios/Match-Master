@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Master</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <main class="app">
+        <section id="startScreen" class="start-screen">
+            <div class="start-panel">
+                <h2>Start New Game</h2>
+                <form id="setupForm">
+                    <label for="difficulty">Difficulty:</label>
+                    <select id="difficulty" name="difficulty">
+                        <option value="easy">Easy (6 pairs)</option>
+                        <option value="medium">Medium (8 pairs)</option>
+                        <option value="hard">Hard (10 pairs)</option>
+                        <option value="expert">Expert (12 pairs)</option>
+                    </select>
+                    <label for="cardSet">Card Set:</label>
+                    <select id="cardSet" name="cardSet">
+                        <option value="fruits">Fruits & Food</option>
+                        <option value="sports">Sports & Games</option>
+                        <option value="mixed">Mixed</option>
+                    </select>
+                    <button type="submit" class="btn start-btn">Start Game</button>
+                </form>
+            </div>
+        </section>
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Memory Challenge</p>
+                <h1>Match Master</h1>
+            </div>
+            <button id="resetBtn" class="btn" type="button">New Game</button>
+        </header>
+        <section class="status-panel" aria-live="polite">
+            <article class="stat-card">
+                <p>Level</p>
+                <strong id="level">1</strong>
+            </article>
+            <article class="stat-card">
+                <p>Moves</p>
+                <strong id="moves">0</strong>
+            </article>
+            <article class="stat-card">
+                <p>Time</p>
+                <strong id="timer">00:00</strong>
+            </article>
+            <article class="stat-card">
+                <p>Pairs Left</p>
+                <strong id="pairsLeft">0</strong>
+            </article>
+        </section>
+        <p id="message" class="message">Flip two cards to start. Good luck!</p>
+        <section>
+            <div id="gameBoard" class="board" role="grid" aria-label="Memory card board"></div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
