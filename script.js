@@ -27,11 +27,22 @@ const cardSets = {
 };
 
 const difficultyLevels = {
-    easy: { pairs: 6, columns: 4 },
-    medium: { pairs: 8, columns: 4 },
-    hard: { pairs: 10, columns: 5 },
-    expert: { pairs: 12, columns: 6 }
+    easy: { pairs: 6, columns: 4, time: 60 },      // 1:00
+    medium: { pairs: 8, columns: 4, time: 60 },    // 1:00
+    hard: { pairs: 10, columns: 5, time: 60 },     // 1:00
+    expert: { pairs: 12, columns: 6, time: 60 }    // 1:00
 };
+// Show allowed time for each difficulty on the start screen
+const timeInfo = document.getElementById("timeInfo");
+function updateTimeInfo() {
+    const diff = difficultySelect.value;
+    const secs = difficultyLevels[diff].time;
+    const mins = Math.floor(secs / 60).toString();
+    const s = (secs % 60).toString().padStart(2, "0");
+    timeInfo.textContent = `Time: ${mins}:${s}`;
+}
+difficultySelect.addEventListener("change", updateTimeInfo);
+updateTimeInfo();
 
 let currentLevel = 0;
 let moves = 0;
@@ -42,6 +53,8 @@ let lockBoard = false;
 let timerId = null;
 let elapsedSeconds = 0;
 let timerStarted = false;
+let timeLeft = 0;
+let timeLimit = 0;
 let selectedDifficulty = 'easy';
 let selectedCardSet = 'fruits';
 let currentConfig = difficultyLevels[selectedDifficulty];
@@ -67,16 +80,48 @@ function startGameFromSetup(e) {
     selectedCardSet = cardSetSelect.value;
     currentConfig = difficultyLevels[selectedDifficulty];
     currentSymbols = cardSets[selectedCardSet];
+    timeLimit = currentConfig.time;
+    timeLeft = timeLimit;
+    elapsedSeconds = 0;
+    timerStarted = false;
+    timerEl.textContent = formatTime(timeLeft);
     startScreen.style.display = 'none';
     showGameUI();
     startLevel(true);
 }
+
 
 setupForm.addEventListener('submit', startGameFromSetup);
 
 // Hide game UI and show start screen on load
 hideGameUI();
 startScreen.style.display = 'flex';
+
+// Renders the cards on the board for the current level
+function startLevel(resetStats = false) {
+    // Clear board
+    board.innerHTML = '';
+    // Set columns for board
+    board.style.setProperty('--columns', currentConfig.columns);
+    // Prepare symbols
+    const symbols = shuffle(currentSymbols).slice(0, currentConfig.pairs);
+    const cardSymbols = shuffle([...symbols, ...symbols]);
+    // Reset stats if needed
+    if (resetStats) {
+        moves = 0;
+        matches = 0;
+        firstPick = null;
+        secondPick = null;
+        lockBoard = false;
+        updateStats();
+        setMessage('Flip two cards to start. Good luck!');
+    }
+    // Render cards
+    cardSymbols.forEach((symbol, idx) => {
+        const card = createCard(symbol, idx);
+        board.appendChild(card);
+    });
+}
 
 function shuffle(list) {
     const copy = [...list];
@@ -100,8 +145,17 @@ function startTimer() {
     timerStarted = true;
     timerId = setInterval(() => {
         elapsedSeconds += 1;
-        timerEl.textContent = formatTime(elapsedSeconds);
+        timeLeft -= 1;
+        timerEl.textContent = formatTime(timeLeft);
+        if (timeLeft <= 0) {
+            stopTimer();
+            timerEl.textContent = "00:00";
+            lockBoard = true;
+            setMessage("⏰ Time's up! Try again or start a new game.", true);
+            // Optionally, flip all cards to show solution or disable further play
+        }
     }, 1000);
+    timerEl.textContent = formatTime(timeLeft);
 }
 
 function stopTimer() {
@@ -109,6 +163,7 @@ function stopTimer() {
         clearInterval(timerId);
     }
     timerId = null;
+    timerStarted = false;
 }
 
 function setMessage(text, warning = false) {
@@ -138,7 +193,7 @@ function createCard(symbol, id) {
 
     card.innerHTML = `
         <div class="card-inner">
-            <div class="card-face card-back">?</div>
+            <div class="card-face card-back"></div>
             <div class="card-face card-front">${symbol}</div>
         </div>
     `;
@@ -203,6 +258,7 @@ function handleCardClick(card) {
 }
 
 resetBtn.addEventListener("click", () => {
+    stopTimer();
     hideGameUI();
     startScreen.style.display = 'flex';
 });
