@@ -6,6 +6,7 @@ const levelEl = document.getElementById("level");
 const pairsLeftEl = document.getElementById("pairsLeft");
 const messageEl = document.getElementById("message");
 const resetBtn = document.getElementById("resetBtn");
+const replayBtn = document.getElementById("replayBtn");
 const startScreen = document.getElementById("startScreen");
 const setupForm = document.getElementById("setupForm");
 const difficultySelect = document.getElementById("difficulty");
@@ -20,9 +21,21 @@ const cardSets = {
         "⚽", "🏀", "🏈", "⚾", "🎾", "🏐", "🏉", "🎱",
         "🏓", "🏸", "🥅", "🥊", "🏒", "🏏", "🥋", "⛳"
     ],
-    mixed: [
-        "🍉", "🍎", "🍒", "🍋", "🍇", "🍍", "🥝", "🍓",
-        "⚽", "🏀", "🎯", "🎮", "🎧", "🎲", "🚗", "🚀"
+    animals: [
+        "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼",
+        "🐨", "🐯", "🦁", "🐮", "🐷", "🐸", "🐵", "🦄",
+        "🐔", "🐧", "🐦", "🐤", "🦆", "🦅", "🦉", "🦇",
+        "🐺", "🐗", "🐴", "🦓", "🦍", "🦧", "🐘", "🦛",
+        "🦏", "🐪", "🐫", "🦒", "🦘", "🦬", "🐃", "🐂",
+        "🐄", "🐎", "🐖", "🐏", "🐑", "🦙", "🐐", "🦌"
+    ],
+    emojis: [
+        "😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆",
+        "😉", "😊", "😋", "😎", "😍", "😘", "🥰", "😗",
+        "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐",
+        "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐",
+        "😯", "😪", "😫", "🥱", "😴", "😌", "😛", "😜",
+        "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑"
     ]
 };
 
@@ -257,8 +270,18 @@ function handleCardClick(card) {
     }, 850);
 }
 
+
 resetBtn.addEventListener("click", () => {
     stopTimer();
     hideGameUI();
     startScreen.style.display = 'flex';
 });
+
+// Replay button: restart game with same settings
+if (replayBtn) {
+    replayBtn.addEventListener("click", () => {
+        stopTimer();
+        showGameUI();
+        startLevel(true);
+    });
+}

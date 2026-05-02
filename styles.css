@@ -1,3 +1,10 @@
+/* Button row for header */
+.button-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
 /* Start screen styles */
 .start-screen {
     display: none;
