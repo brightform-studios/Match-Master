@@ -1,5 +1,6 @@
 
 const board = document.getElementById("gameBoard");
+const copyrightNotice = document.getElementById("copyrightNotice");
 const movesEl = document.getElementById("moves");
 const timerEl = document.getElementById("timer");
 const levelEl = document.getElementById("level");
@@ -73,18 +74,22 @@ let selectedCardSet = 'fruits';
 let currentConfig = difficultyLevels[selectedDifficulty];
 let currentSymbols = cardSets[selectedCardSet];
 
+
 function showGameUI() {
     document.querySelector('.topbar').style.display = '';
     document.querySelector('.status-panel').style.display = '';
     document.getElementById('message').style.display = '';
     document.getElementById('gameBoard').parentElement.style.display = '';
+    if (copyrightNotice) copyrightNotice.style.display = '';
 }
+
 
 function hideGameUI() {
     document.querySelector('.topbar').style.display = 'none';
     document.querySelector('.status-panel').style.display = 'none';
     document.getElementById('message').style.display = 'none';
     document.getElementById('gameBoard').parentElement.style.display = 'none';
+    if (copyrightNotice) copyrightNotice.style.display = 'none';
 }
 
 function startGameFromSetup(e) {
